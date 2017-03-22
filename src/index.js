@@ -20,14 +20,11 @@ export default function(files, schemaPath, subdir = '__relay__') {
                 if (Object.keys(flowtypes).length) {
                     // Sync to avoid race conditions
                     if (!fs.existsSync(outputDir)) {
-                        // TODO
-                        console.log('making', outputDir);
-                        // fs.mkdirSync(outputDir);
+                        fs.mkdirSync(outputDir);
                     }
 
                     const outputFileContents = generate(flowtypes, path.basename(filename));
-                    // TODO fs.writeFile(outputFilename, outputFileContents, {encoding: 'utf8'});
-                    console.log(`${outputFilename}\n\n${outputFileContents}\n\n\n\n`);
+                    fs.writeFile(outputFilename, outputFileContents, {encoding: 'utf8'});
                 }
             }
         });
