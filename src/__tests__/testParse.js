@@ -1,0 +1,69 @@
+import {buildClientSchema} from 'graphql/utilities/buildClientSchema';
+import parse from '../parse';
+
+
+const schema = buildClientSchema(require('../../test-schema.json'));
+
+
+describe('parse', () => {
+    it('should handle empty files', () => {
+        expect(parse(``, schema)).toEqual({});
+    });
+
+    it('should ignore comments', () => {
+        expect(parse(`
+// Relay.QL\`query { node(id: $id) { id } }\`
+/*
+Relay.QL\`query {
+    node(id: $id) {
+        id
+    }
+}\`
+*/
+`, schema)).toEqual({});
+    });
+
+    it('should parse multiple Relay.QLs in the same file', () => {
+        const parsed = parse(`
+            Relay.QL\`query { node(id: $id) { id } }\`
+            
+            Relay.QL\`query {
+                node(id: $id) {
+                    id
+                }
+            }\`
+            
+            Relay.QL\`
+                fragment on User {
+                    id
+                }
+            \`
+        `, schema);
+        expect(parsed.NodeQueryType.length).toEqual(2);
+        expect(parsed.UserFragmentType.length).toEqual(1);
+    });
+
+    it('should handle complex fragments', () => {
+        expect(parse(`
+            Relay.QL\`
+                fragment on User {
+                    ... on User {
+                        username
+                    }
+                    todos(first: 5) {
+                        title
+                    }
+                }
+            \`
+        `, schema)).toEqual({
+            UserFragmentType: [
+                {
+                    username: {type: 'string', nonNull: true},
+                    todos: {type: 'list', ofType: {type: 'object', object: {
+                        title: {type: 'string', nonNull: true}
+                    }, nonNull: true}, nonNull: true}
+                }
+            ]
+        });
+    });
+});

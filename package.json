@@ -1,0 +1,46 @@
+{
+  "name": "relay-flow-types",
+  "version": "0.0.1",
+  "description": "Command line tool to generate flow types from Relay.QL",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mixcloud/relay-flow-types.git"
+  },
+  "main": "lib/index.js",
+  "bin": "lib/cli.js",
+  "scripts": {
+    "test": "jest --config=jest.config.json",
+    "test-watch": "jest --config=jest.config.json --watch --onlyChanged",
+    "compile": "babel --ignore __tests__,__mocks__ --out-dir lib/ src/",
+    "prepublish": "rm -rf lib && npm run compile"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "lib/"
+  ],
+  "keywords": [
+    "graphql",
+    "relay",
+    "flow",
+    "flowtype"
+  ],
+  "author": {
+    "name": "Sam Cooke",
+    "email": "sam@mixcloud.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "glob": "^7.1.1",
+    "graphql": "^0.9.1",
+    "yargs": "^7.0.2"
+  },
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.23.0",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "jest": "^19.0.2",
+    "jest-jasmine2": "^19.0.2"
+  }
+}
