@@ -66,4 +66,16 @@ Relay.QL\`query {
             ]
         });
     });
+
+    it('should handle empty items', () => {
+        expect(parse(`
+            Relay.QL\`
+                fragment on User {
+                    \${Something.getFragment('whatever')}
+                }
+            \`
+        `, schema)).toEqual({
+            UserFragmentType: [{}]
+        });
+    });
 });

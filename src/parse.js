@@ -67,7 +67,7 @@ function getObjectFlowType(obj, type, schema) {
     if (obj.selectionSet) {
         obj.selectionSet.selections.forEach(selection => {
             const {kind, alias} = selection;
-            if (alias === PLACEHOLDER_FIELD_NAME) {
+            if (alias && alias.value === PLACEHOLDER_FIELD_NAME) {
                 return;
             }
 
