@@ -24,7 +24,11 @@ export default function(files, schemaPath, subdir = '__relay__') {
                     }
 
                     const outputFileContents = generate(flowtypes, path.basename(filename));
-                    fs.writeFile(outputFilename, outputFileContents, {encoding: 'utf8'});
+                    fs.writeFile(outputFilename, outputFileContents, {encoding: 'utf8'}, (err) => {
+                        if (err) {
+                            process.stderr.write(JSON.stringify(err));
+                        }
+                    });
                 }
             }
         });
