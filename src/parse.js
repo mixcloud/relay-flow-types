@@ -20,6 +20,7 @@ export default function(contents, schema) {
         // Removing fragments could make an object empty so put a placeholder in there - __typename is something we know
         // will always be available
         queryString = queryString.replace(/\$\{.*?\.getFragment\(.*?\)}/g, `${PLACEHOLDER_FIELD_NAME}: __typename`);
+        queryString = queryString.replace(/\$\{[a-zA-Z0-9_]+}/g, `${PLACEHOLDER_FIELD_NAME}: __typename`);
 
         const parsed = parse(new Source(queryString));
         const definition = parsed.definitions[0];

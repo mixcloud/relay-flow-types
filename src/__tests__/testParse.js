@@ -78,4 +78,19 @@ Relay.QL\`query {
             UserFragmentType: [{}]
         });
     });
+
+    it('should handle variables included as fragments', () => {
+        expect(parse(`
+            Relay.QL\`
+                fragment on User {
+                    username
+                    \${some_VariableName1}
+                }
+            \`
+        `, schema)).toEqual({
+            UserFragmentType: [
+                {username: {type: 'string', nonNull: true}}
+            ]
+        });
+    });
 });
