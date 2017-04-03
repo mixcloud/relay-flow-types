@@ -79,6 +79,24 @@ Relay.QL\`query {
         });
     });
 
+    it('should handle empty lists of items', () => {
+        expect(parse(`
+            Relay.QL\`
+                fragment on User {
+                    todos {
+                        \${SomeComponent.getFragment('todos')}
+                    }
+                }
+            \`
+        `, schema)).toEqual({
+            UserFragmentType: [
+                {
+                    todos: {type: 'list', ofType: {type: 'object', object: {}, nonNull: true}, nonNull: true}
+                }
+            ]
+        });
+    });
+
     it('should handle variables included as fragments', () => {
         expect(parse(`
             Relay.QL\`

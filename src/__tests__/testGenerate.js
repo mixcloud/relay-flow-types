@@ -91,8 +91,8 @@ export type Single = {|
     objectListField: Array<{|
         stringField: string
     |}>,
-    nullableEmptyObjectListField: null | {||},
-    emptyObjectListField: {||}
+    nullableEmptyObjectListField: null | Array<{||}>,
+    emptyObjectListField: Array<{||}>
 |};
 
 export type Duplicate1 = {|

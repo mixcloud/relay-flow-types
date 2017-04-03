@@ -38,12 +38,7 @@ function fieldType(field, indent) {
 
     switch (field.type) {
         case 'list':
-            if (field.ofType.type === 'object' && !Object.keys(field.ofType.object).length) {
-                // If there are no selections we want an opaque object even if it is a list
-                flowType = `{||}`;
-            } else {
-                flowType = `Array<${fieldType(field.ofType, indent)}>`;
-            }
+            flowType = `Array<${fieldType(field.ofType, indent)}>`;
             break;
         case 'object':
             flowType = objectType(field.object, `${indent}${INDENT}`);
