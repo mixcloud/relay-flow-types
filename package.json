@@ -1,6 +1,6 @@
 {
   "name": "relay-flow-types",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "description": "Command line tool to generate flow types from Relay.QL",
   "repository": {
     "type": "git",
