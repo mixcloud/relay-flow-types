@@ -34,8 +34,8 @@ export default function(contents, schema) {
                             const type = schema.getQueryType().getFields()[selection.name.value].type;
                             const flowtype = getObjectFlowType(selection, type, schema);
                             const typeName = `${type.name}QueryType`;
-                            flowtypes[typeName] = flowtypes[typeName] || [];
-                            flowtypes[typeName].push(flowtype);
+                            flowtypes[typeName] = flowtypes[typeName] || {type: 'query', flowtypes: []};
+                            flowtypes[typeName].flowtypes.push(flowtype);
                         } catch (err) {
                             console.error(`Could not handle Query\n\n${originalQueryString}`);
                             throw err;
@@ -48,8 +48,8 @@ export default function(contents, schema) {
                     const type = schema.getType(definition.typeCondition.name.value);
                     const flowtype = getObjectFlowType(definition, type, schema);
                     const typeName = `${type.name}FragmentType`;
-                    flowtypes[typeName] = flowtypes[typeName] || [];
-                    flowtypes[typeName].push(flowtype);
+                    flowtypes[typeName] = flowtypes[typeName] || {type: 'fragment', flowtypes: []};
+                    flowtypes[typeName].flowtypes.push(flowtype);
                 } catch (err) {
                     console.error(`Could not handle Fragment\n\n${originalQueryString}`);
                     throw err;

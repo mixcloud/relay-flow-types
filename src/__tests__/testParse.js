@@ -39,8 +39,25 @@ Relay.QL\`query {
                 }
             \`
         `, schema);
-        expect(parsed.NodeQueryType.length).toEqual(2);
-        expect(parsed.UserFragmentType.length).toEqual(1);
+        expect(parsed.NodeQueryType.flowtypes.length).toEqual(2);
+        expect(parsed.UserFragmentType.flowtypes.length).toEqual(1);
+    });
+
+    it('should mark query types as nonNull: false', () => {
+        expect(parse(`
+            Relay.QL\`query {
+                node(id: $id) {
+                    id
+                }
+            }\`
+        `, schema)).toEqual({
+            NodeQueryType: {
+                type: 'query',
+                flowtypes: [
+                    {id: {nonNull: true, type: 'string'}}
+                ]
+            }
+        });
     });
 
     it('should handle complex fragments', () => {
@@ -56,14 +73,17 @@ Relay.QL\`query {
                 }
             \`
         `, schema)).toEqual({
-            UserFragmentType: [
-                {
-                    username: {type: 'string', nonNull: true},
-                    todos: {type: 'list', ofType: {type: 'object', object: {
-                        title: {type: 'string', nonNull: true}
-                    }, nonNull: true}, nonNull: true}
-                }
-            ]
+            UserFragmentType: {
+                type: 'fragment',
+                flowtypes: [
+                    {
+                        username: {type: 'string', nonNull: true},
+                        todos: {type: 'list', ofType: {type: 'object', object: {
+                            title: {type: 'string', nonNull: true}
+                        }, nonNull: true}, nonNull: true}
+                    }
+                ]
+            }
         });
     });
 
@@ -75,7 +95,7 @@ Relay.QL\`query {
                 }
             \`
         `, schema)).toEqual({
-            UserFragmentType: [{}]
+            UserFragmentType: {type: 'fragment', flowtypes: [{}]}
         });
     });
 
@@ -89,11 +109,14 @@ Relay.QL\`query {
                 }
             \`
         `, schema)).toEqual({
-            UserFragmentType: [
-                {
-                    todos: {type: 'list', ofType: {type: 'object', object: {}, nonNull: true}, nonNull: true}
-                }
-            ]
+            UserFragmentType: {
+                type: 'fragment',
+                flowtypes: [
+                    {
+                        todos: {type: 'list', ofType: {type: 'object', object: {}, nonNull: true}, nonNull: true}
+                    }
+                ]
+            }
         });
     });
 
@@ -106,9 +129,12 @@ Relay.QL\`query {
                 }
             \`
         `, schema)).toEqual({
-            UserFragmentType: [
-                {username: {type: 'string', nonNull: true}}
-            ]
+            UserFragmentType: {
+                type: 'fragment',
+                flowtypes: [
+                    {username: {type: 'string', nonNull: true}}
+                ]
+            }
         });
     });
 });

@@ -1,16 +1,17 @@
 const INDENT = '    ';
 
 
-export default function(flowtypes, filename) {
-    const types = [];
+export default function(types, filename) {
+    const output = [];
 
-    Object.keys(flowtypes).forEach(name => {
-        if (flowtypes[name].length > 1) {
-            flowtypes[name].forEach((flowtype, index) => {
-                types.push(`export type ${name}${index + 1} = ${objectType(flowtype)};`)
+    Object.keys(types).forEach(name => {
+        const {flowtypes, type} = types[name];
+        if (flowtypes.length > 1) {
+            flowtypes.forEach((flowtype, index) => {
+                output.push(`export type ${name}${index + 1} = ${type === 'query' ? 'null | ' : ''}${objectType(flowtype)};`)
             });
         } else {
-            types.push(`export type ${name} = ${objectType(flowtypes[name][0])};`)
+            output.push(`export type ${name} = ${type === 'query' ? 'null | ' : ''}${objectType(flowtypes[0])};`)
         }
     });
 
@@ -19,7 +20,7 @@ DO NOT UPDATE THIS FILE MANUALLY
 Auto-generated flowtypes for Relay queries and fragments in ../${filename}
 */
 
-${types.join('\n\n')}
+${output.join('\n\n')}
 `;
 };
 
