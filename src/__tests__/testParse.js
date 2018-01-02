@@ -114,6 +114,33 @@ Relay.QL\`query {
         });
     });
 
+    fit('should handle long comments and weird interpolation', () => {
+        expect(parse(`
+            Relay.QL\`
+                fragment on User {
+					\${commentUserFragment}
+					todos(first: 5) {
+                        title
+                    }
+					\${Something.getFragment('whatever')} # something really long like so long that it might wrap around or something like that you know like really long
+                }
+            \`
+        `, schema)).toEqual({
+            UserFragmentType: {type: 'fragment', flowtypes: [{
+				todos: {
+					type: 'list', ofType: {
+						type: 'object', 
+						object: {
+					    	title: {type: 'string', nonNull: true}
+						},
+						nonNull: true
+					}, 
+					nonNull: true
+				}
+			}]}
+        });
+    });
+
     it('should handle empty lists of items', () => {
         expect(parse(`
             Relay.QL\`
