@@ -99,6 +99,21 @@ Relay.QL\`query {
         });
     });
 
+
+    it('should handle multiline fragment interpolation', () => {
+        expect(parse(`
+            Relay.QL\`
+                fragment on User {
+                    \${Something.getFragment(
+						'whatever'
+					)}
+                }
+            \`
+        `, schema)).toEqual({
+            UserFragmentType: {type: 'fragment', flowtypes: [{}]}
+        });
+    });
+
     it('should handle empty lists of items', () => {
         expect(parse(`
             Relay.QL\`

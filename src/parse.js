@@ -17,11 +17,12 @@ export default function(contents, schema) {
         const originalQueryString = match[1];
         // Fix Relay's non-standard GraphQL
         let queryString = originalQueryString.replace('fragment on', 'fragment F1 on');
+		// Remove newlines that may come from formatting and would break the regex below
+        queryString = queryString.replace(/\n/g, ' ');
         // Removing fragments could make an object empty so put a placeholder in there - __typename is something we know
         // will always be available
         queryString = queryString.replace(/\$\{.*?\.getFragment\(.*?\)}/g, `${PLACEHOLDER_FIELD_NAME}: __typename`);
         queryString = queryString.replace(/\$\{[a-zA-Z0-9_]+}/g, `${PLACEHOLDER_FIELD_NAME}: __typename`);
-
         const parsed = parse(new Source(queryString));
         const definition = parsed.definitions[0];
         switch (definition.kind) {
