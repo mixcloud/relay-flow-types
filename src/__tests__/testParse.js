@@ -114,7 +114,7 @@ Relay.QL\`query {
         });
     });
 
-    fit('should handle long comments and weird interpolation', () => {
+    it('should handle long comments and weird interpolation', () => {
         expect(parse(`
             Relay.QL\`
                 fragment on User {
